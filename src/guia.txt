@@ -1,3 +1,29 @@
 #0B3B1A
 #7EEC9F
 #FFFBFF
+
+  
+  React.useEffect(() =>{    
+    setarValores()
+  },[valueTip])
+  
+  function setarValores () {
+    if(!(personValue && totalValue)) return null
+
+      const matchTip = regexp.exec(personValue)
+      const matchTotal = regexp.exec(totalValue)
+        if (!matchTip || !matchTotal)  {
+          setError("Preencha corretamente!")
+          console.log("errado")
+          return null
+        }
+    
+        const tipPerson = 0 || (Number(totalValue) + (totalValue * valueTip))
+        setTip((tip)=> tip = tipPerson.toFixed(2))
+  }
+      
+  React.useEffect(()=>{
+    if(tip > 0 && personValue) setValue((tip / Number(personValue).toFixed(2)))
+  },[tip])
+
+///////////////
