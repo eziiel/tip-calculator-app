@@ -14,8 +14,12 @@ const TipCalculator =() => {
   const [statusReset, setStatusReset] = React.useState(false)
 
   const [percent, setPercent] = React.useState(0)
-  const [totalPerson, setTotalPerson] = React.useState(0)
+
   const [cleanTotal, setCleanTotal] = React.useState(0)
+
+  const [cleanPerson, setCleanPerson] = React.useState(0)
+  const [slicePerson, setSlicePerson] = React.useState(0)
+  const [resPercent, setResPercent] = React.useState(0)
   
   const [tip, setTip] = React.useState(0)
   const [value, setValue] = React.useState(0)
@@ -24,9 +28,11 @@ const TipCalculator =() => {
   const person = UseBtn()
   const total = UseBtn()
 
-  const personValue = person.value
-  const totalValue = total.value
+  let totalValue = total.value
+  let personValue = person.value
 
+  totalValue = totalValue.replace(/[A-Z a-z]/g,'').replace(/[.,]{1,}/g, '.')
+  let res = Number(totalValue.slice(0,totalValue.indexOf('.')+1) + totalValue.slice(totalValue.indexOf('')).replaceAll('.',''))
 
   function handleReset () {
     console.log(tip,value)
@@ -40,30 +46,38 @@ const TipCalculator =() => {
     }
   }, [person.value, total.value])
 
-  function handleTip ({target}) {
-    let personTotal = Number(personValue.replaceAll(/\D/g,''))
-    
-    if(!(personValue && totalValue)) return null
+  function handleTip ({target})  {
+    if(!(totalValue && personValue)) return null
+
     setPercent(Number(target.innerText.slice(0,2)/100))
-   
-    function limpar (item) {
-      let valor = item.replace(/[A-Z a-z]/g,'').replace(/[.,]{1,}/g, '.')
-      let res = valor.slice(0,valor.indexOf('.')+1) + valor.slice(valor.indexOf('')).replaceAll('.','')
-  
-      return res
+    
+    setCleanTotal(Number(res))
+    setCleanPerson(Number(personValue.replaceAll(/\D/g,'')))
   }
-    setCleanTotal(Number(limpar(totalValue)))
-    setTotalPerson(personTotal)
-  }
-  
-  React.useEffect(()=>{
-    let percRes = cleanTotal / totalPerson
 
-    percRes && percent && setTip(percRes * percent)
-    percent && setValue((cleanTotal / totalPerson) + tip)
+ 
+  React.useEffect(() => {
+    let res = cleanTotal/cleanPerson
+    let resPer = res * percent
 
+    
+    res && setSlicePerson(res)
+    resPer && setResPercent(resPer)
+    
   },[percent])
   
+  
+  React.useEffect(() => {
+    setTip(resPercent)
+    setValue(slicePerson + resPercent)
+  },[resPercent])
+
+  React.useEffect(() => {
+    // setValue(slicePerson)
+    console.log(slicePerson + tip)
+  },[resPercent])
+
+
 
   return (
     <MainStyled>

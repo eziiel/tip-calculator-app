@@ -27,3 +27,11 @@
   },[tip])
 
 ///////////////
+
+   
+    function limpar (item) {
+      let valor = item.replace(/[A-Z a-z]/g,'').replace(/[.,]{1,}/g, '.')
+      let res = valor.slice(0,valor.indexOf('.')+1) + valor.slice(valor.indexOf('')).replaceAll('.','')
+  
+      return res
+  }
