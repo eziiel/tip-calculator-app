@@ -7,24 +7,25 @@ import iconPerson from "../images/icon-person.svg"
 import iconReal from "../images/icon-real.svg"
 import { Btn } from "./componentsForm/btn"
 import { BtnTip } from "./componentsForm/BtnTip"
+import { useEffect } from "react"
 
 
 
 const TipCalculator =() => {
   const [statusReset, setStatusReset] = React.useState(false)
 
-  const [percent, setPercent] = React.useState(0)
+  const [percent, setPercent] = React.useState('')
 
-  const [cleanTotal, setCleanTotal] = React.useState(0)
+  const [cleanTotal, setCleanTotal] = React.useState('')
 
-  const [cleanPerson, setCleanPerson] = React.useState(0)
-  const [slicePerson, setSlicePerson] = React.useState(0)
-  const [resPercent, setResPercent] = React.useState(0)
+  const [cleanPerson, setCleanPerson] = React.useState('')
+  const [slicePerson, setSlicePerson] = React.useState('')
+  const [resPercent, setResPercent] = React.useState('')
   
-  const [tip, setTip] = React.useState(0)
-  const [value, setValue] = React.useState(0)
+  const [tip, setTip] = React.useState('')
+  const [value, setValue] = React.useState('')
   
-  const [errorTotal, setErrorTotal] = React.useState('aaa')
+  const [errorTotal, setErrorTotal] = React.useState('')
   const [errorPerson, setErrorPerson] = React.useState('')
 
 
@@ -39,10 +40,10 @@ const TipCalculator =() => {
   let res = Number(totalValue.slice(0,totalValue.indexOf('.')+1) + totalValue.slice(totalValue.indexOf('')).replaceAll('.',''))
 
   function handleReset () {
-    setTip(0)
-    setValue(0)
-    setCleanPerson(0)
-    setPercent(0)
+    setTip('')
+    setValue('')
+    setCleanPerson('')
+    setPercent('')
     person.Reset()
     total.Reset()
   }
@@ -63,27 +64,41 @@ const TipCalculator =() => {
     setCleanTotal(Number(res))
     setCleanPerson(Number(personValue.replaceAll(/\D/g,'')))
 
-    cleanPerson === 0? setErrorPerson('preencha um valor maior que 0')
-    :setErrorPerson('')
-
+    
   }
+  useEffect(()=>{
+  },[statusReset])
   
   
   React.useEffect(() => {
-    let res = cleanPerson ==0 ? 0 : cleanTotal/cleanPerson
-    let resPer = cleanPerson ==0? 0 : res * percent
+
+    typeof cleanTotal == String || cleanTotal === 0? setErrorTotal('preencha um valor maior que 0')
+    :setErrorTotal('')
+
+    typeof cleanPerson == String || cleanPerson === 0? setErrorPerson('preencha um valor maior que 0')
+    :setErrorPerson('')
+
+    let res = cleanPerson == 0 ? 0 : (cleanTotal/cleanPerson).toFixed(2)
+    let resPer = cleanPerson == 0? 0 : (res * percent).toFixed(2)
     
     res && setSlicePerson(res)
     resPer && setResPercent(resPer)
     
   },[percent])
   
+  React.useEffect(() => {
+      setTip(resPercent)
+      setValue(slicePerson + resPercent)
+  },[resPercent])
+  
   
   React.useEffect(() => {
+    let resFinal = (+slicePerson + +resPercent)
     setTip(resPercent)
-    setValue(slicePerson + resPercent)
-  },[resPercent])
-
+    tip && setValue(resFinal.toFixed(2))
+  },[tip])
+  
+  
   return (
     <MainStyled>
       <ValuesSection>
