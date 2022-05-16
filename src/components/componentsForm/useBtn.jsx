@@ -8,11 +8,15 @@ const UseBtn = () => {
   function onChange ({target}) {
     setValue(target.value)
   }
+  function Reset () {
+    setValue('')
+  }
 
  
   return {
     value,
     onChange,
+    Reset,
   }
 }
 export {

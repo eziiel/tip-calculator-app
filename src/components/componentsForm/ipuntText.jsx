@@ -1,14 +1,22 @@
 
 import React from "react"
-import { Img, Input, Label } from "./styledForm"
+import { Img, Input, Label, Span, SpanError, Spantitle } from "./styledForm"
 
 
-const InputText = ({label,value,onChange,src,alt}) => {
+const InputText = ({label,value,onChange,src,alt,error}) => {
 
   return (
     <div>
       <Label>
-        {label}
+        <Span>
+          <Spantitle>
+          {label}
+          </Spantitle>
+
+          <SpanError>
+          {error}
+          </SpanError>
+        </Span>
         <Img src={src} alt={alt} />
           <Input 
         value={value}

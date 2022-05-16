@@ -24,9 +24,13 @@ const TipCalculator =() => {
   const [tip, setTip] = React.useState(0)
   const [value, setValue] = React.useState(0)
   
-  const [error, setError] = React.useState('')
+  const [errorTotal, setErrorTotal] = React.useState('aaa')
+  const [errorPerson, setErrorPerson] = React.useState('')
+
+
   const person = UseBtn()
   const total = UseBtn()
+
 
   let totalValue = total.value
   let personValue = person.value
@@ -35,7 +39,12 @@ const TipCalculator =() => {
   let res = Number(totalValue.slice(0,totalValue.indexOf('.')+1) + totalValue.slice(totalValue.indexOf('')).replaceAll('.',''))
 
   function handleReset () {
-    console.log(tip,value)
+    setTip(0)
+    setValue(0)
+    setCleanPerson(0)
+    setPercent(0)
+    person.Reset()
+    total.Reset()
   }
   
   React.useEffect(() => {
@@ -53,13 +62,16 @@ const TipCalculator =() => {
     
     setCleanTotal(Number(res))
     setCleanPerson(Number(personValue.replaceAll(/\D/g,'')))
+
+    cleanPerson === 0? setErrorPerson('preencha um valor maior que 0')
+    :setErrorPerson('')
+
   }
-
- 
+  
+  
   React.useEffect(() => {
-    let res = cleanTotal/cleanPerson
-    let resPer = res * percent
-
+    let res = cleanPerson ==0 ? 0 : cleanTotal/cleanPerson
+    let resPer = cleanPerson ==0? 0 : res * percent
     
     res && setSlicePerson(res)
     resPer && setResPercent(resPer)
@@ -72,13 +84,6 @@ const TipCalculator =() => {
     setValue(slicePerson + resPercent)
   },[resPercent])
 
-  React.useEffect(() => {
-    // setValue(slicePerson)
-    console.log(slicePerson + tip)
-  },[resPercent])
-
-
-
   return (
     <MainStyled>
       <ValuesSection>
@@ -87,6 +92,7 @@ const TipCalculator =() => {
         label = "Bill"
         src = {iconReal}
         alt = "icon Real"
+        error={errorTotal}
         {...total}
         />
 
@@ -115,6 +121,7 @@ const TipCalculator =() => {
         label = "Number of People"
         src = {iconPerson}
         alt = "icon Person"
+        error={errorPerson}
         {...person}
         />
       </ValuesSection>
