@@ -63,12 +63,7 @@ const TipCalculator =() => {
     
     setCleanTotal(Number(res))
     setCleanPerson(Number(personValue.replaceAll(/\D/g,'')))
-
-    
   }
-  useEffect(()=>{
-  },[statusReset])
-  
   
   React.useEffect(() => {
 
@@ -94,7 +89,6 @@ const TipCalculator =() => {
   
   React.useEffect(() => {
     let resFinal = (+slicePerson + +resPercent)
-    setTip(resPercent)
     tip && setValue(resFinal.toFixed(2))
   },[tip])
   
